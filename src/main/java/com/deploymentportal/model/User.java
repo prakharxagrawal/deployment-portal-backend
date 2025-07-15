@@ -17,6 +17,12 @@ public class User {
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getRole() {
+        if ("user".equalsIgnoreCase(role)) return "developer";
+        return role;
+    }
+    public void setRole(String role) {
+        if ("user".equalsIgnoreCase(role)) this.role = "developer";
+        else this.role = role;
+    }
 }

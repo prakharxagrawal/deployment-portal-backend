@@ -1,18 +1,184 @@
-INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'admin');
-INSERT INTO users (username, password, role) VALUES ('user', 'user123', 'user');
-INSERT INTO releases (name) VALUES ('Release 1.0');
-INSERT INTO releases (name) VALUES ('Release 2.0');
-INSERT INTO deployment (serial_number, csi_id, release_branch, release, status, created_by)
-VALUES ('MSDR0000001', '172033', 'main', 'Release 1.0', 'Open', 'admin');
+-- Insert users with updated structure (super admin, admin, developer)
+INSERT INTO users (username, password, role) VALUES ('superadmin1', 'admin123', 'superadmin');
+INSERT INTO users (username, password, role) VALUES ('admin1', 'admin123', 'admin');
+INSERT INTO users (username, password, role) VALUES ('admin2', 'admin123', 'admin');
+INSERT INTO users (username, password, role) VALUES ('dev1', 'dev123', 'developer');
+INSERT INTO users (username, password, role) VALUES ('dev2', 'dev123', 'developer');
 
--- Insert services for deployment id 1
-INSERT INTO deployment_services (deployment_id, services) VALUES (1, 'Service1');
-INSERT INTO deployment_services (deployment_id, services) VALUES (1, 'Service2');
+-- Insert releases for all months
+INSERT INTO releases (name) VALUES ('January');
+INSERT INTO releases (name) VALUES ('February');
+INSERT INTO releases (name) VALUES ('March');
+INSERT INTO releases (name) VALUES ('April');
+INSERT INTO releases (name) VALUES ('May');
+INSERT INTO releases (name) VALUES ('June');
+INSERT INTO releases (name) VALUES ('July');
+INSERT INTO releases (name) VALUES ('August');
+INSERT INTO releases (name) VALUES ('September');
+INSERT INTO releases (name) VALUES ('October');
+INSERT INTO releases (name) VALUES ('November');
+INSERT INTO releases (name) VALUES ('December');
 
--- Insert request_ids for deployment id 1
-INSERT INTO deployment_request_ids (deployment_id, request_ids) VALUES (1, 'REQ001');
-INSERT INTO deployment_request_ids (deployment_id, request_ids) VALUES (1, 'REQ002');
+-- Sample deployments with realistic data and custom dates (using only 3 CSI IDs: 172033, 172223, 169608)
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000001', '172033', 'User Authentication Service', 'REQ001', 'main', 'December', 'Completed', 'superadmin1', 'Phoenix', '2024-01-15 09:30:00', '2024-01-20 14:45:00', false, NULL, 'RLM-DEV1-001', 'RLM-UAT1-001', 'RLM-PERF1-001', 'RLM-PERF2-001', 'RLM-PROD1-001', 'RLM-PROD2-001');
 
--- Insert environments for deployment id 1
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (1, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (1, 'DEV1');
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000002', '172223', 'Payment Processing API', 'REQ002', 'feature/payment-gateway', 'January', 'In Progress', 'dev1', 'Avengers', '2024-01-22 11:15:00', '2024-01-25 16:20:00', true, 'CONF002', 'RLM-DEV1-002', 'RLM-UAT1-002', 'RLM-PERF1-002', 'RLM-PERF2-002', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000003', '169608', 'Customer Profile Service', 'REQ003', 'main', 'February', 'Pending', 'admin1', 'Transformers', '2024-02-01 08:45:00', '2024-02-03 12:30:00', false, NULL, 'RLM-DEV1-003', NULL, 'RLM-PERF1-003', 'RLM-PERF2-003', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000004', '172033', 'Notification Engine', 'REQ004', 'hotfix/email-bug', 'February', 'Completed', 'dev2', 'Phoenix', '2024-02-05 13:20:00', '2024-02-08 10:15:00', true, 'CONF004', 'RLM-DEV1-004', 'RLM-UAT1-004', 'RLM-PERF1-004', 'RLM-PERF2-004', 'RLM-PROD1-004', 'RLM-PROD2-004');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000005', '172223', 'Order Management System', 'REQ005', 'feature/order-tracking', 'March', 'Open', 'dev1', 'Hyper Care', '2024-02-12 15:45:00', '2024-02-12 15:45:00', false, NULL, 'RLM-DEV1-005', 'RLM-UAT1-005', 'RLM-PERF1-005', 'RLM-PERF2-005', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000006', '169608', 'Inventory Management API', 'REQ006', 'main', 'March', 'In Progress', 'dev1', 'CRUD', '2024-02-18 09:00:00', '2024-02-20 11:30:00', true, 'CONF006', 'RLM-DEV1-006', 'RLM-UAT1-006', 'RLM-PERF1-006', 'RLM-PERF2-006', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000007', '172033', 'Analytics Dashboard Service', 'REQ007', 'feature/real-time-analytics', 'April', 'Pending', 'admin2', 'Crusaders', '2024-03-02 14:15:00', '2024-03-05 09:45:00', false, NULL, 'RLM-DEV1-007', NULL, 'RLM-PERF1-007', 'RLM-PERF2-007', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000008', '172223', 'File Upload Service', 'REQ008', 'main', 'April', 'Completed', 'dev2', 'Phoenix', '2024-03-08 10:30:00', '2024-03-12 16:20:00', false, NULL, 'RLM-DEV1-008', 'RLM-UAT1-008', 'RLM-PERF1-008', 'RLM-PERF2-008', 'RLM-PROD1-008', 'RLM-PROD2-008');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000009', '169608', 'Security Audit Service', 'REQ009', 'feature/compliance-check', 'May', 'Pending', 'dev2', 'Avengers', '2024-03-15 12:00:00', '2024-03-15 12:00:00', false, NULL, 'RLM-DEV1-009', 'RLM-UAT1-009', 'RLM-PERF1-009', 'RLM-PERF2-009', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000010', '172033', 'Email Template Engine', 'REQ010', 'main', 'May', 'In Progress', 'dev1', 'Transformers', '2024-03-20 08:15:00', '2024-03-22 13:45:00', false, NULL, 'RLM-DEV1-010', 'RLM-UAT1-010', 'RLM-PERF1-010', 'RLM-PERF2-010', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000011', '172223', 'Rate Limiting Service', 'REQ011', 'feature/throttling', 'June', 'Pending', 'admin2', 'Phoenix', '2024-03-28 16:30:00', '2024-03-30 10:15:00', true, 'CONF011', 'RLM-DEV1-011', NULL, 'RLM-PERF1-011', 'RLM-PERF2-011', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000012', '169608', 'Search Engine Service', 'REQ012', 'main', 'June', 'Completed', 'dev2', 'Hyper Care', '2024-04-02 11:45:00', '2024-04-08 14:30:00', false, NULL, 'RLM-DEV1-012', 'RLM-UAT1-012', 'RLM-PERF1-012', 'RLM-PERF2-012', 'RLM-PROD1-012', 'RLM-PROD2-012');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000013', '172033', 'Cache Management Service', 'REQ013', 'feature/redis-cache', 'July', 'Open', 'admin1', 'CRUD', '2024-04-10 09:20:00', '2024-04-10 09:20:00', true, 'CONF013', 'RLM-DEV1-013', 'RLM-UAT1-013', 'RLM-PERF1-013', 'RLM-PERF2-013', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000014', '172223', 'Logging Aggregation Service', 'REQ014', 'main', 'July', 'In Progress', 'dev1', 'Crusaders', '2024-04-15 13:00:00', '2024-04-18 15:45:00', false, NULL, 'RLM-DEV1-014', 'RLM-UAT1-014', 'RLM-PERF1-014', 'RLM-PERF2-014', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000015', '169608', 'API Gateway Service', 'REQ015', 'feature/oauth2', 'August', 'Pending', 'admin2', 'Avengers', '2024-04-22 10:30:00', '2024-04-25 12:15:00', true, 'CONF015', 'RLM-DEV1-015', NULL, 'RLM-PERF1-015', 'RLM-PERF2-015', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000016', '172033', 'Database Migration Service', 'REQ016', 'main', 'August', 'Completed', 'dev2', 'Transformers', '2024-05-01 08:00:00', '2024-05-06 17:30:00', false, NULL, 'RLM-DEV1-016', 'RLM-UAT1-016', 'RLM-PERF1-016', 'RLM-PERF2-016', 'RLM-PROD1-016', 'RLM-PROD2-016');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000017', '172223', 'Health Check Service', 'REQ017', 'feature/monitoring', 'September', 'Open', 'admin1', 'Phoenix', '2024-05-08 14:45:00', '2024-05-08 14:45:00', true, 'CONF017', 'RLM-DEV1-017', 'RLM-UAT1-017', 'RLM-PERF1-017', 'RLM-PERF2-017', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000018', '169608', 'Configuration Management Service', 'REQ018', 'main', 'September', 'In Progress', 'dev1', 'Hyper Care', '2024-05-12 11:20:00', '2024-05-15 09:30:00', false, NULL, 'RLM-DEV1-018', 'RLM-UAT1-018', 'RLM-PERF1-018', 'RLM-PERF2-018', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000019', '172033', 'Message Queue Service', 'REQ019', 'feature/rabbitmq', 'October', 'Pending', 'admin2', 'CRUD', '2024-05-18 16:15:00', '2024-05-20 13:45:00', true, 'CONF019', 'RLM-DEV1-019', NULL, 'RLM-PERF1-019', 'RLM-PERF2-019', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000020', '172223', 'Backup and Recovery Service', 'REQ020', 'main', 'October', 'Completed', 'dev2', 'Crusaders', '2024-05-25 09:45:00', '2024-05-30 16:00:00', false, NULL, 'RLM-DEV1-020', 'RLM-UAT1-020', 'RLM-PERF1-020', 'RLM-PERF2-020', 'RLM-PROD1-020', 'RLM-PROD2-020');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000021', '169608', 'Document Processing Service', 'REQ021', 'feature/pdf-generation', 'November', 'Open', 'admin1', 'Phoenix', '2024-06-02 12:30:00', '2024-06-02 12:30:00', true, 'CONF021', 'RLM-DEV1-021', 'RLM-UAT1-021', 'RLM-PERF1-021', 'RLM-PERF2-021', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000022', '172033', 'Real-time Chat Service', 'REQ022', 'main', 'November', 'In Progress', 'dev1', 'Avengers', '2024-06-08 15:15:00', '2024-06-10 11:45:00', false, NULL, 'RLM-DEV1-022', 'RLM-UAT1-022', 'RLM-PERF1-022', 'RLM-PERF2-022', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000023', '172223', 'Load Balancer Service', 'REQ023', 'feature/nginx-config', 'December', 'Pending', 'admin2', 'Transformers', '2024-06-15 10:00:00', '2024-06-18 14:20:00', true, 'CONF023', 'RLM-DEV1-023', NULL, 'RLM-PERF1-023', 'RLM-PERF2-023', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000024', '169608', 'Metrics Collection Service', 'REQ024', 'main', 'December', 'Completed', 'dev2', 'Hyper Care', '2024-06-22 08:30:00', '2024-06-28 17:15:00', false, NULL, 'RLM-DEV1-024', 'RLM-UAT1-024', 'RLM-PERF1-024', 'RLM-PERF2-024', 'RLM-PROD1-024', 'RLM-PROD2-024');
+
+-- Add more entries to reach 25+ total with diverse data (using only 3 CSI IDs: 172033, 172223, 169608)
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000025', '172033', 'Fraud Detection Service', 'REQ025', 'feature/ml-detection', 'January', 'Open', 'dev1', 'CRUD', '2024-07-05 14:20:00', '2024-07-05 14:20:00', false, NULL, 'RLM-DEV1-025', 'RLM-UAT1-025', 'RLM-PERF1-025', 'RLM-PERF2-025', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000026', '172223', 'Image Processing API', 'REQ026', 'main', 'February', 'In Progress', 'dev1', 'Crusaders', '2024-07-12 09:45:00', '2024-07-15 11:30:00', true, 'CONF026', 'RLM-DEV1-026', 'RLM-UAT1-026', 'RLM-PERF1-026', 'RLM-PERF2-026', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000027', '169608', 'Geolocation Service', 'REQ027', 'feature/maps-integration', 'March', 'Pending', 'admin2', 'Phoenix', '2024-07-18 13:15:00', '2024-07-20 16:45:00', false, NULL, 'RLM-DEV1-027', NULL, 'RLM-PERF1-027', 'RLM-PERF2-027', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000028', '172033', 'Video Streaming Service', 'REQ028', 'main', 'April', 'Completed', 'dev2', 'Avengers', '2024-07-25 10:00:00', '2024-08-02 15:30:00', false, NULL, 'RLM-DEV1-028', 'RLM-UAT1-028', 'RLM-PERF1-028', 'RLM-PERF2-028', 'RLM-PROD1-028', 'RLM-PROD2-028');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000029', '172223', 'Social Media Integration Service', 'REQ029', 'feature/oauth-providers', 'May', 'Open', 'admin1', 'Transformers', '2024-08-08 11:30:00', '2024-08-08 11:30:00', true, 'CONF029', 'RLM-DEV1-029', 'RLM-UAT1-029', 'RLM-PERF1-029', 'RLM-PERF2-029', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000030', '169608', 'Blockchain Verification Service', 'REQ030', 'main', 'June', 'In Progress', 'dev1', 'Hyper Care', '2024-08-15 16:20:00', '2024-08-18 09:45:00', false, NULL, 'RLM-DEV1-030', 'RLM-UAT1-030', 'RLM-PERF1-030', 'RLM-PERF2-030', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000031', '172033', 'IoT Device Management Service', 'REQ031', 'feature/device-registry', 'July', 'Pending', 'admin2', 'CRUD', '2024-08-22 08:15:00', '2024-08-25 14:00:00', true, 'CONF031', 'RLM-DEV1-031', NULL, 'RLM-PERF1-031', 'RLM-PERF2-031', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000032', '172223', 'Machine Learning Pipeline Service', 'REQ032', 'main', 'August', 'Completed', 'dev2', 'Crusaders', '2024-09-01 12:45:00', '2024-09-08 17:20:00', false, NULL, 'RLM-DEV1-032', 'RLM-UAT1-032', 'RLM-PERF1-032', 'RLM-PERF2-032', 'RLM-PROD1-032', 'RLM-PROD2-032');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000033', '169608', 'Compliance Reporting Service', 'REQ033', 'feature/gdpr-compliance', 'September', 'Open', 'admin1', 'Phoenix', '2024-09-10 09:30:00', '2024-09-10 09:30:00', false, NULL, 'RLM-DEV1-033', 'RLM-UAT1-033', 'RLM-PERF1-033', 'RLM-PERF2-033', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000034', '172033', 'Voice Recognition Service', 'REQ034', 'main', 'October', 'In Progress', 'dev1', 'Avengers', '2024-09-16 14:10:00', '2024-09-19 10:25:00', true, 'CONF034', 'RLM-DEV1-034', 'RLM-UAT1-034', 'RLM-PERF1-034', 'RLM-PERF2-034', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000035', '172223', 'Content Delivery Network Service', 'REQ035', 'feature/edge-caching', 'November', 'Pending', 'admin2', 'Transformers', '2024-09-23 15:50:00', '2024-09-26 11:15:00', false, NULL, 'RLM-DEV1-035', NULL, 'RLM-PERF1-035', 'RLM-PERF2-035', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000036', '169608', 'Quantum Encryption Service', 'REQ036', 'main', 'December', 'Completed', 'dev2', 'Hyper Care', '2024-10-02 13:40:00', '2024-10-10 16:55:00', true, 'CONF036', 'RLM-DEV1-036', 'RLM-UAT1-036', 'RLM-PERF1-036', 'RLM-PERF2-036', 'RLM-PROD1-036', 'RLM-PROD2-036');
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000037', '172033', 'AR/VR Content Service', 'REQ037', 'feature/webxr-support', 'January', 'Pending', 'dev2', 'CRUD', '2024-10-08 10:25:00', '2024-10-08 10:25:00', false, NULL, 'RLM-DEV1-037', 'RLM-UAT1-037', 'RLM-PERF1-037', 'RLM-PERF2-037', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000038', '172223', 'Predictive Analytics Service', 'REQ038', 'main', 'February', 'In Progress', 'dev1', 'Crusaders', '2024-10-14 17:05:00', '2024-10-17 12:30:00', false, NULL, 'RLM-DEV1-038', 'RLM-UAT1-038', 'RLM-PERF1-038', 'RLM-PERF2-038', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000039', '169608', 'Digital Wallet Service', 'REQ039', 'feature/multi-currency', 'March', 'Pending', 'admin2', 'Phoenix', '2024-10-21 08:50:00', '2024-10-24 14:35:00', true, 'CONF039', 'RLM-DEV1-039', NULL, 'RLM-PERF1-039', 'RLM-PERF2-039', NULL, NULL);
+
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
+VALUES ('MSDR0000040', '172033', 'Smart Contract Service', 'REQ040', 'main', 'April', 'Completed', 'dev2', 'Avengers', '2024-10-28 11:15:00', '2024-11-05 16:40:00', false, NULL, 'RLM-DEV1-040', 'RLM-UAT1-040', 'RLM-PERF1-040', 'RLM-PERF2-040', 'RLM-PROD1-040', 'RLM-PROD2-040');
+
+-- Insert environments for all deployments
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (1, 'DEV1'), (1, 'UAT1'), (1, 'PERF1'), (1, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (2, 'DEV1'), (2, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (3, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (4, 'DEV1'), (4, 'UAT1'), (4, 'PERF1'), (4, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (5, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (6, 'DEV1'), (6, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (7, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (8, 'DEV1'), (8, 'UAT1'), (8, 'PERF1'), (8, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (9, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (10, 'DEV1'), (10, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (11, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (12, 'DEV1'), (12, 'UAT1'), (12, 'PERF1'), (12, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (13, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (14, 'DEV1'), (14, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (15, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (16, 'DEV1'), (16, 'UAT1'), (16, 'PERF1'), (16, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (17, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (18, 'DEV1'), (18, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (19, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (20, 'DEV1'), (20, 'UAT1'), (20, 'PERF1'), (20, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (21, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (22, 'DEV1'), (22, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (23, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (24, 'DEV1'), (24, 'UAT1'), (24, 'PERF1'), (24, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (25, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (26, 'DEV1'), (26, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (27, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (28, 'DEV1'), (28, 'UAT1'), (28, 'PERF1'), (28, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (29, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (30, 'DEV1'), (30, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (31, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (32, 'DEV1'), (32, 'UAT1'), (32, 'PERF1'), (32, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (33, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (34, 'DEV1'), (34, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (35, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (36, 'DEV1'), (36, 'UAT1'), (36, 'PERF1'), (36, 'PROD1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (37, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (38, 'DEV1'), (38, 'UAT1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (39, 'DEV1');
+INSERT INTO deployment_environments (deployment_id, environments) VALUES (40, 'DEV1'), (40, 'UAT1'), (40, 'PERF1'), (40, 'PROD1');
