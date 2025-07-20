@@ -1,184 +1,175 @@
--- Insert users with updated structure (super admin, admin, developer)
-INSERT INTO users (username, password, role) VALUES ('superadmin1', 'admin123', 'superadmin');
-INSERT INTO users (username, password, role) VALUES ('admin1', 'admin123', 'admin');
-INSERT INTO users (username, password, role) VALUES ('admin2', 'admin123', 'admin');
-INSERT INTO users (username, password, role) VALUES ('dev1', 'dev123', 'developer');
-INSERT INTO users (username, password, role) VALUES ('dev2', 'dev123', 'developer');
+-- Clean data.sql file with correct table structure
+-- Insert 180 dummy services following aaa-bbb-ccc format
+INSERT INTO services (name) VALUES
+-- Authentication Services
+('auth-login-service'), ('auth-logout-service'), ('auth-token-service'), ('auth-session-service'), ('auth-oauth-service'),
+('auth-ldap-service'), ('auth-saml-service'), ('auth-jwt-service'), ('auth-mfa-service'), ('auth-sso-service'),
 
--- Insert releases for all months
-INSERT INTO releases (name) VALUES ('January');
-INSERT INTO releases (name) VALUES ('February');
-INSERT INTO releases (name) VALUES ('March');
-INSERT INTO releases (name) VALUES ('April');
-INSERT INTO releases (name) VALUES ('May');
-INSERT INTO releases (name) VALUES ('June');
-INSERT INTO releases (name) VALUES ('July');
-INSERT INTO releases (name) VALUES ('August');
-INSERT INTO releases (name) VALUES ('September');
-INSERT INTO releases (name) VALUES ('October');
-INSERT INTO releases (name) VALUES ('November');
-INSERT INTO releases (name) VALUES ('December');
+-- Payment Services  
+('pay-gateway-service'), ('pay-processor-service'), ('pay-validation-service'), ('pay-refund-service'), ('pay-settlement-service'),
+('pay-currency-service'), ('pay-fraud-service'), ('pay-billing-service'), ('pay-invoice-service'), ('pay-subscription-service'),
 
--- Sample deployments with realistic data and custom dates (using only 3 CSI IDs: 172033, 172223, 169608)
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000001', '172033', 'User Authentication Service', 'REQ001', 'main', 'December', 'Completed', 'superadmin1', 'Phoenix', '2024-01-15 09:30:00', '2024-01-20 14:45:00', false, NULL, 'RLM-DEV1-001', 'RLM-UAT1-001', 'RLM-PERF1-001', 'RLM-PERF2-001', 'RLM-PROD1-001', 'RLM-PROD2-001');
+-- User Management Services
+('user-profile-service'), ('user-auth-service'), ('user-register-service'), ('user-update-service'), ('user-delete-service'),
+('user-search-service'), ('user-verify-service'), ('user-suspend-service'), ('user-restore-service'), ('user-migrate-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000002', '172223', 'Payment Processing API', 'REQ002', 'feature/payment-gateway', 'January', 'In Progress', 'dev1', 'Avengers', '2024-01-22 11:15:00', '2024-01-25 16:20:00', true, 'CONF002', 'RLM-DEV1-002', 'RLM-UAT1-002', 'RLM-PERF1-002', 'RLM-PERF2-002', NULL, NULL);
+-- Notification Services
+('notif-email-service'), ('notif-sms-service'), ('notif-push-service'), ('notif-template-service'), ('notif-queue-service'),
+('notif-delivery-service'), ('notif-schedule-service'), ('notif-history-service'), ('notif-preference-service'), ('notif-analytics-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000003', '169608', 'Customer Profile Service', 'REQ003', 'main', 'February', 'Pending', 'admin1', 'Transformers', '2024-02-01 08:45:00', '2024-02-03 12:30:00', false, NULL, 'RLM-DEV1-003', NULL, 'RLM-PERF1-003', 'RLM-PERF2-003', NULL, NULL);
+-- Data Services
+('data-sync-service'), ('data-backup-service'), ('data-restore-service'), ('data-migration-service'), ('data-validation-service'),
+('data-transform-service'), ('data-analytics-service'), ('data-export-service'), ('data-import-service'), ('data-archive-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000004', '172033', 'Notification Engine', 'REQ004', 'hotfix/email-bug', 'February', 'Completed', 'dev2', 'Phoenix', '2024-02-05 13:20:00', '2024-02-08 10:15:00', true, 'CONF004', 'RLM-DEV1-004', 'RLM-UAT1-004', 'RLM-PERF1-004', 'RLM-PERF2-004', 'RLM-PROD1-004', 'RLM-PROD2-004');
+-- API Services
+('api-gateway-service'), ('api-rate-service'), ('api-monitor-service'), ('api-version-service'), ('api-security-service'),
+('api-cache-service'), ('api-proxy-service'), ('api-transform-service'), ('api-validate-service'), ('api-document-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000005', '172223', 'Order Management System', 'REQ005', 'feature/order-tracking', 'March', 'Open', 'dev1', 'Hyper Care', '2024-02-12 15:45:00', '2024-02-12 15:45:00', false, NULL, 'RLM-DEV1-005', 'RLM-UAT1-005', 'RLM-PERF1-005', 'RLM-PERF2-005', NULL, NULL);
+-- Security Services
+('sec-encrypt-service'), ('sec-decrypt-service'), ('sec-hash-service'), ('sec-verify-service'), ('sec-audit-service'),
+('sec-policy-service'), ('sec-compliance-service'), ('sec-scan-service'), ('sec-monitor-service'), ('sec-alert-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000006', '169608', 'Inventory Management API', 'REQ006', 'main', 'March', 'In Progress', 'dev1', 'CRUD', '2024-02-18 09:00:00', '2024-02-20 11:30:00', true, 'CONF006', 'RLM-DEV1-006', 'RLM-UAT1-006', 'RLM-PERF1-006', 'RLM-PERF2-006', NULL, NULL);
+-- File Services
+('file-upload-service'), ('file-download-service'), ('file-storage-service'), ('file-compress-service'), ('file-convert-service'),
+('file-preview-service'), ('file-search-service'), ('file-share-service'), ('file-backup-service'), ('file-sync-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000007', '172033', 'Analytics Dashboard Service', 'REQ007', 'feature/real-time-analytics', 'April', 'Pending', 'admin2', 'Crusaders', '2024-03-02 14:15:00', '2024-03-05 09:45:00', false, NULL, 'RLM-DEV1-007', NULL, 'RLM-PERF1-007', 'RLM-PERF2-007', NULL, NULL);
+-- Reporting Services
+('report-generate-service'), ('report-schedule-service'), ('report-export-service'), ('report-template-service'), ('report-data-service'),
+('report-chart-service'), ('report-dashboard-service'), ('report-alert-service'), ('report-archive-service'), ('report-share-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000008', '172223', 'File Upload Service', 'REQ008', 'main', 'April', 'Completed', 'dev2', 'Phoenix', '2024-03-08 10:30:00', '2024-03-12 16:20:00', false, NULL, 'RLM-DEV1-008', 'RLM-UAT1-008', 'RLM-PERF1-008', 'RLM-PERF2-008', 'RLM-PROD1-008', 'RLM-PROD2-008');
+-- Workflow Services
+('flow-orchestrate-service'), ('flow-execute-service'), ('flow-monitor-service'), ('flow-schedule-service'), ('flow-retry-service'),
+('flow-approval-service'), ('flow-escalate-service'), ('flow-audit-service'), ('flow-template-service'), ('flow-optimize-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000009', '169608', 'Security Audit Service', 'REQ009', 'feature/compliance-check', 'May', 'Pending', 'dev2', 'Avengers', '2024-03-15 12:00:00', '2024-03-15 12:00:00', false, NULL, 'RLM-DEV1-009', 'RLM-UAT1-009', 'RLM-PERF1-009', 'RLM-PERF2-009', NULL, NULL);
+-- Integration Services
+('int-connector-service'), ('int-transform-service'), ('int-route-service'), ('int-queue-service'), ('int-batch-service'),
+('int-stream-service'), ('int-sync-service'), ('int-validate-service'), ('int-monitor-service'), ('int-error-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000010', '172033', 'Email Template Engine', 'REQ010', 'main', 'May', 'In Progress', 'dev1', 'Transformers', '2024-03-20 08:15:00', '2024-03-22 13:45:00', false, NULL, 'RLM-DEV1-010', 'RLM-UAT1-010', 'RLM-PERF1-010', 'RLM-PERF2-010', NULL, NULL);
+-- Configuration Services
+('config-manage-service'), ('config-deploy-service'), ('config-validate-service'), ('config-backup-service'), ('config-restore-service'),
+('config-version-service'), ('config-encrypt-service'), ('config-audit-service'), ('config-template-service'), ('config-sync-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000011', '172223', 'Rate Limiting Service', 'REQ011', 'feature/throttling', 'June', 'Pending', 'admin2', 'Phoenix', '2024-03-28 16:30:00', '2024-03-30 10:15:00', true, 'CONF011', 'RLM-DEV1-011', NULL, 'RLM-PERF1-011', 'RLM-PERF2-011', NULL, NULL);
+-- Monitoring Services
+('mon-health-service'), ('mon-metrics-service'), ('mon-logs-service'), ('mon-trace-service'), ('mon-alert-service'),
+('mon-dashboard-service'), ('mon-report-service'), ('mon-analytics-service'), ('mon-forecast-service'), ('mon-optimize-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000012', '169608', 'Search Engine Service', 'REQ012', 'main', 'June', 'Completed', 'dev2', 'Hyper Care', '2024-04-02 11:45:00', '2024-04-08 14:30:00', false, NULL, 'RLM-DEV1-012', 'RLM-UAT1-012', 'RLM-PERF1-012', 'RLM-PERF2-012', 'RLM-PROD1-012', 'RLM-PROD2-012');
+-- Cache Services
+('cache-redis-service'), ('cache-memory-service'), ('cache-cluster-service'), ('cache-invalidate-service'), ('cache-preload-service'),
+('cache-stats-service'), ('cache-backup-service'), ('cache-restore-service'), ('cache-optimize-service'), ('cache-monitor-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000013', '172033', 'Cache Management Service', 'REQ013', 'feature/redis-cache', 'July', 'Open', 'admin1', 'CRUD', '2024-04-10 09:20:00', '2024-04-10 09:20:00', true, 'CONF013', 'RLM-DEV1-013', 'RLM-UAT1-013', 'RLM-PERF1-013', 'RLM-PERF2-013', NULL, NULL);
+-- Search Services
+('search-index-service'), ('search-query-service'), ('search-suggest-service'), ('search-filter-service'), ('search-rank-service'),
+('search-analytics-service'), ('search-optimize-service'), ('search-update-service'), ('search-backup-service'), ('search-restore-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000014', '172223', 'Logging Aggregation Service', 'REQ014', 'main', 'July', 'In Progress', 'dev1', 'Crusaders', '2024-04-15 13:00:00', '2024-04-18 15:45:00', false, NULL, 'RLM-DEV1-014', 'RLM-UAT1-014', 'RLM-PERF1-014', 'RLM-PERF2-014', NULL, NULL);
+-- Communication Services
+('comm-chat-service'), ('comm-video-service'), ('comm-audio-service'), ('comm-message-service'), ('comm-broadcast-service'),
+('comm-conference-service'), ('comm-record-service'), ('comm-translate-service'), ('comm-moderate-service'), ('comm-archive-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000015', '169608', 'API Gateway Service', 'REQ015', 'feature/oauth2', 'August', 'Pending', 'admin2', 'Avengers', '2024-04-22 10:30:00', '2024-04-25 12:15:00', true, 'CONF015', 'RLM-DEV1-015', NULL, 'RLM-PERF1-015', 'RLM-PERF2-015', NULL, NULL);
+-- Content Services
+('content-create-service'), ('content-edit-service'), ('content-publish-service'), ('content-review-service'), ('content-archive-service'),
+('content-search-service'), ('content-tag-service'), ('content-version-service'), ('content-backup-service'), ('content-sync-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000016', '172033', 'Database Migration Service', 'REQ016', 'main', 'August', 'Completed', 'dev2', 'Transformers', '2024-05-01 08:00:00', '2024-05-06 17:30:00', false, NULL, 'RLM-DEV1-016', 'RLM-UAT1-016', 'RLM-PERF1-016', 'RLM-PERF2-016', 'RLM-PROD1-016', 'RLM-PROD2-016');
+-- Location Services
+('loc-geocode-service'), ('loc-map-service'), ('loc-route-service'), ('loc-track-service'), ('loc-geofence-service'),
+('loc-distance-service'), ('loc-weather-service'), ('loc-timezone-service'), ('loc-address-service'), ('loc-coordinate-service'),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000017', '172223', 'Health Check Service', 'REQ017', 'feature/monitoring', 'September', 'Open', 'admin1', 'Phoenix', '2024-05-08 14:45:00', '2024-05-08 14:45:00', true, 'CONF017', 'RLM-DEV1-017', 'RLM-UAT1-017', 'RLM-PERF1-017', 'RLM-PERF2-017', NULL, NULL);
+-- Machine Learning Services
+('ml-train-service'), ('ml-predict-service'), ('ml-evaluate-service'), ('ml-deploy-service'), ('ml-monitor-service'),
+('ml-optimize-service'), ('ml-data-service'), ('ml-feature-service'), ('ml-model-service'), ('ml-pipeline-service');
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000018', '169608', 'Configuration Management Service', 'REQ018', 'main', 'September', 'In Progress', 'dev1', 'Hyper Care', '2024-05-12 11:20:00', '2024-05-15 09:30:00', false, NULL, 'RLM-DEV1-018', 'RLM-UAT1-018', 'RLM-PERF1-018', 'RLM-PERF2-018', NULL, NULL);
+-- Insert users with role-based permissions
+INSERT INTO users (username, password, role) VALUES 
+('superadmin1', 'admin123', 'superadmin'),
+('admin1', 'admin123', 'admin'),
+('admin2', 'admin123', 'admin'), 
+('dev1', 'dev123', 'developer'),
+('dev2', 'dev123', 'developer'),
+('dev3', 'dev123', 'developer');
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000019', '172033', 'Message Queue Service', 'REQ019', 'feature/rabbitmq', 'October', 'Pending', 'admin2', 'CRUD', '2024-05-18 16:15:00', '2024-05-20 13:45:00', true, 'CONF019', 'RLM-DEV1-019', NULL, 'RLM-PERF1-019', 'RLM-PERF2-019', NULL, NULL);
+-- Insert releases with name and description only
+INSERT INTO releases (name, description) VALUES 
+('2025-01', 'Initial release for January 2025'),
+('2025-02', 'February 2025 feature release'),
+('2025-03', 'March 2025 quarterly release'),
+('2025-04', 'April 2025 spring release'),
+('2025-05', 'May 2025 enhancement release'),
+('2025-06', 'June 2025 mid-year release'),
+('2025-07', 'July 2025 summer release'),
+('2025-08', 'August 2025 maintenance release'),
+('2025-09', 'September 2025 quarterly release'),
+('2025-10', 'October 2025 fall release'),
+('2025-11', 'November 2025 pre-holiday release'),
+('2025-12', 'December 2025 year-end release'),
+('2026-01', 'January 2026 major release'),
+('2026-02', 'February 2026 feature release'),
+('2026-03', 'March 2026 quarterly release'),
+('2026-04', 'April 2026 spring release'),
+('2026-05', 'May 2026 enhancement release'),
+('2026-06', 'June 2026 mid-year release');
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000020', '172223', 'Backup and Recovery Service', 'REQ020', 'main', 'October', 'Completed', 'dev2', 'Crusaders', '2024-05-25 09:45:00', '2024-05-30 16:00:00', false, NULL, 'RLM-DEV1-020', 'RLM-UAT1-020', 'RLM-PERF1-020', 'RLM-PERF2-020', 'RLM-PROD1-020', 'RLM-PROD2-020');
+-- Insert deployment entries 1-30 (ALL environments exclude PROD - as per requirement)
+-- Using proper column structure matching Deployment entity
+INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_uat1, rlm_id_uat2, rlm_id_uat3, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2, production_ready) VALUES 
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000021', '169608', 'Document Processing Service', 'REQ021', 'feature/pdf-generation', 'November', 'Open', 'admin1', 'Phoenix', '2024-06-02 12:30:00', '2024-06-02 12:30:00', true, 'CONF021', 'RLM-DEV1-021', 'RLM-UAT1-021', 'RLM-PERF1-021', 'RLM-PERF2-021', NULL, NULL);
+-- Entries 1-10 (Earlier dates)
+('MSDR0000001', '172033', 'auth-login-service', 'jenkins-REQ001', 'main', '2025-01', 'Completed', 'dev1', 'Phoenix', '2024-01-15 09:30:00', '2024-01-20 14:45:00', false, NULL, 'RLM-UAT1-001', 'RLM-UAT2-001', 'RLM-UAT3-001', 'RLM-PERF1-001', 'RLM-PERF2-001', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000022', '172033', 'Real-time Chat Service', 'REQ022', 'main', 'November', 'In Progress', 'dev1', 'Avengers', '2024-06-08 15:15:00', '2024-06-10 11:45:00', false, NULL, 'RLM-DEV1-022', 'RLM-UAT1-022', 'RLM-PERF1-022', 'RLM-PERF2-022', NULL, NULL);
+('MSDR0000002', '172223', 'pay-gateway-service', 'jenkins-REQ002', 'feature/payment-gateway', '2025-01', 'In Progress', 'dev2', 'Avengers', '2024-01-22 11:15:00', '2024-01-25 16:20:00', true, 'jenkins-CONF002', 'RLM-UAT1-002', 'RLM-UAT2-002', NULL, 'RLM-PERF1-002', NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000023', '172223', 'Load Balancer Service', 'REQ023', 'feature/nginx-config', 'December', 'Pending', 'admin2', 'Transformers', '2024-06-15 10:00:00', '2024-06-18 14:20:00', true, 'CONF023', 'RLM-DEV1-023', NULL, 'RLM-PERF1-023', 'RLM-PERF2-023', NULL, NULL);
+('MSDR0000003', '169608', 'user-profile-service', 'jenkins-REQ003', 'main', '2025-02', 'Pending', 'dev3', 'Transformers', '2024-02-01 08:45:00', '2024-02-03 12:30:00', false, NULL, 'RLM-UAT1-003', NULL, NULL, 'RLM-PERF1-003', 'RLM-PERF2-003', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000024', '169608', 'Metrics Collection Service', 'REQ024', 'main', 'December', 'Completed', 'dev2', 'Hyper Care', '2024-06-22 08:30:00', '2024-06-28 17:15:00', false, NULL, 'RLM-DEV1-024', 'RLM-UAT1-024', 'RLM-PERF1-024', 'RLM-PERF2-024', 'RLM-PROD1-024', 'RLM-PROD2-024');
+('MSDR0000004', '172033', 'notif-email-service', 'jenkins-REQ004', 'hotfix/notification', '2025-02', 'Open', 'dev1', 'X-Men', '2024-02-10 14:20:00', '2024-02-10 14:20:00', true, 'jenkins-CONF004', 'RLM-UAT1-004', 'RLM-UAT2-004', NULL, NULL, NULL, NULL, NULL, false),
 
--- Add more entries to reach 25+ total with diverse data (using only 3 CSI IDs: 172033, 172223, 169608)
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000025', '172033', 'Fraud Detection Service', 'REQ025', 'feature/ml-detection', 'January', 'Open', 'dev1', 'CRUD', '2024-07-05 14:20:00', '2024-07-05 14:20:00', false, NULL, 'RLM-DEV1-025', 'RLM-UAT1-025', 'RLM-PERF1-025', 'RLM-PERF2-025', NULL, NULL);
+('MSDR0000005', '172223', 'data-sync-service', 'jenkins-REQ005', 'main', '2025-03', 'Completed', 'dev2', 'Justice League', '2024-02-18 10:30:00', '2024-02-25 16:45:00', false, NULL, 'RLM-UAT1-005', 'RLM-UAT2-005', 'RLM-UAT3-005', 'RLM-PERF1-005', 'RLM-PERF2-005', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000026', '172223', 'Image Processing API', 'REQ026', 'main', 'February', 'In Progress', 'dev1', 'Crusaders', '2024-07-12 09:45:00', '2024-07-15 11:30:00', true, 'CONF026', 'RLM-DEV1-026', 'RLM-UAT1-026', 'RLM-PERF1-026', 'RLM-PERF2-026', NULL, NULL);
+('MSDR0000006', '169608', 'api-gateway-service', 'jenkins-REQ006', 'feature/api-v2', '2025-03', 'In Progress', 'dev3', 'Guardians', '2024-03-01 09:15:00', '2024-03-05 11:30:00', false, NULL, 'RLM-UAT1-006', 'RLM-UAT2-006', NULL, 'RLM-PERF1-006', NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000027', '169608', 'Geolocation Service', 'REQ027', 'feature/maps-integration', 'March', 'Pending', 'admin2', 'Phoenix', '2024-07-18 13:15:00', '2024-07-20 16:45:00', false, NULL, 'RLM-DEV1-027', NULL, 'RLM-PERF1-027', 'RLM-PERF2-027', NULL, NULL);
+('MSDR0000007', '172033', 'sec-encrypt-service', 'jenkins-REQ007', 'main', '2025-04', 'Pending', 'dev1', 'Fantastic Four', '2024-03-12 13:45:00', '2024-03-15 09:20:00', true, 'jenkins-CONF007', 'RLM-UAT1-007', NULL, NULL, NULL, NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000028', '172033', 'Video Streaming Service', 'REQ028', 'main', 'April', 'Completed', 'dev2', 'Avengers', '2024-07-25 10:00:00', '2024-08-02 15:30:00', false, NULL, 'RLM-DEV1-028', 'RLM-UAT1-028', 'RLM-PERF1-028', 'RLM-PERF2-028', 'RLM-PROD1-028', 'RLM-PROD2-028');
+('MSDR0000008', '172223', 'file-upload-service', 'jenkins-REQ008', 'release/v2.1', '2025-04', 'Open', 'dev2', 'Teen Titans', '2024-03-20 15:10:00', '2024-03-20 15:10:00', false, NULL, 'RLM-UAT1-008', 'RLM-UAT2-008', NULL, 'RLM-PERF1-008', 'RLM-PERF2-008', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000029', '172223', 'Social Media Integration Service', 'REQ029', 'feature/oauth-providers', 'May', 'Open', 'admin1', 'Transformers', '2024-08-08 11:30:00', '2024-08-08 11:30:00', true, 'CONF029', 'RLM-DEV1-029', 'RLM-UAT1-029', 'RLM-PERF1-029', 'RLM-PERF2-029', NULL, NULL);
+('MSDR0000009', '169608', 'report-generate-service', 'jenkins-REQ009', 'main', '2025-05', 'Completed', 'dev3', 'Power Rangers', '2024-03-28 08:30:00', '2024-04-02 14:15:00', false, NULL, 'RLM-UAT1-009', 'RLM-UAT2-009', 'RLM-UAT3-009', 'RLM-PERF1-009', 'RLM-PERF2-009', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000030', '169608', 'Blockchain Verification Service', 'REQ030', 'main', 'June', 'In Progress', 'dev1', 'Hyper Care', '2024-08-15 16:20:00', '2024-08-18 09:45:00', false, NULL, 'RLM-DEV1-030', 'RLM-UAT1-030', 'RLM-PERF1-030', 'RLM-PERF2-030', NULL, NULL);
+('MSDR0000010', '172033', 'flow-orchestrate-service', 'jenkins-REQ010', 'feature/workflow', '2025-05', 'In Progress', 'dev1', 'Ninja Turtles', '2024-04-05 12:00:00', '2024-04-08 16:30:00', true, 'jenkins-CONF010', 'RLM-UAT1-010', 'RLM-UAT2-010', NULL, NULL, NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000031', '172033', 'IoT Device Management Service', 'REQ031', 'feature/device-registry', 'July', 'Pending', 'admin2', 'CRUD', '2024-08-22 08:15:00', '2024-08-25 14:00:00', true, 'CONF031', 'RLM-DEV1-031', NULL, 'RLM-PERF1-031', 'RLM-PERF2-031', NULL, NULL);
+-- Entries 11-20 (Mid dates)
+('MSDR0000011', '172223', 'int-connector-service', 'jenkins-REQ011', 'main', '2025-06', 'Pending', 'dev2', 'Avengers', '2024-04-12 10:45:00', '2024-04-15 13:20:00', false, NULL, 'RLM-UAT1-011', NULL, NULL, 'RLM-PERF1-011', NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000032', '172223', 'Machine Learning Pipeline Service', 'REQ032', 'main', 'August', 'Completed', 'dev2', 'Crusaders', '2024-09-01 12:45:00', '2024-09-08 17:20:00', false, NULL, 'RLM-DEV1-032', 'RLM-UAT1-032', 'RLM-PERF1-032', 'RLM-PERF2-032', 'RLM-PROD1-032', 'RLM-PROD2-032');
+('MSDR0000012', '169608', 'config-manage-service', 'jenkins-REQ012', 'hotfix/config', '2025-06', 'Open', 'dev3', 'X-Men', '2024-04-20 14:15:00', '2024-04-20 14:15:00', true, 'jenkins-CONF012', 'RLM-UAT1-012', 'RLM-UAT2-012', NULL, 'RLM-PERF1-012', 'RLM-PERF2-012', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000033', '169608', 'Compliance Reporting Service', 'REQ033', 'feature/gdpr-compliance', 'September', 'Open', 'admin1', 'Phoenix', '2024-09-10 09:30:00', '2024-09-10 09:30:00', false, NULL, 'RLM-DEV1-033', 'RLM-UAT1-033', 'RLM-PERF1-033', 'RLM-PERF2-033', NULL, NULL);
+('MSDR0000013', '172033', 'mon-health-service', 'jenkins-REQ013', 'main', '2025-07', 'Completed', 'dev1', 'Justice League', '2024-04-25 09:20:00', '2024-05-01 15:40:00', false, NULL, 'RLM-UAT1-013', 'RLM-UAT2-013', 'RLM-UAT3-013', 'RLM-PERF1-013', 'RLM-PERF2-013', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000034', '172033', 'Voice Recognition Service', 'REQ034', 'main', 'October', 'In Progress', 'dev1', 'Avengers', '2024-09-16 14:10:00', '2024-09-19 10:25:00', true, 'CONF034', 'RLM-DEV1-034', 'RLM-UAT1-034', 'RLM-PERF1-034', 'RLM-PERF2-034', NULL, NULL);
+('MSDR0000014', '172223', 'cache-redis-service', 'jenkins-REQ014', 'feature/caching', '2025-07', 'In Progress', 'dev2', 'Guardians', '2024-05-03 11:30:00', '2024-05-06 14:45:00', false, NULL, 'RLM-UAT1-014', 'RLM-UAT2-014', NULL, 'RLM-PERF1-014', NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000035', '172223', 'Content Delivery Network Service', 'REQ035', 'feature/edge-caching', 'November', 'Pending', 'admin2', 'Transformers', '2024-09-23 15:50:00', '2024-09-26 11:15:00', false, NULL, 'RLM-DEV1-035', NULL, 'RLM-PERF1-035', 'RLM-PERF2-035', NULL, NULL);
+('MSDR0000015', '169608', 'search-index-service', 'jenkins-REQ015', 'main', '2025-08', 'Pending', 'dev3', 'Fantastic Four', '2024-05-10 13:15:00', '2024-05-12 10:25:00', true, 'jenkins-CONF015', 'RLM-UAT1-015', NULL, NULL, NULL, NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000036', '169608', 'Quantum Encryption Service', 'REQ036', 'main', 'December', 'Completed', 'dev2', 'Hyper Care', '2024-10-02 13:40:00', '2024-10-10 16:55:00', true, 'CONF036', 'RLM-DEV1-036', 'RLM-UAT1-036', 'RLM-PERF1-036', 'RLM-PERF2-036', 'RLM-PROD1-036', 'RLM-PROD2-036');
+('MSDR0000016', '172033', 'comm-chat-service', 'jenkins-REQ016', 'release/v3.0', '2025-08', 'Open', 'dev1', 'Teen Titans', '2024-05-18 15:40:00', '2024-05-18 15:40:00', false, NULL, 'RLM-UAT1-016', 'RLM-UAT2-016', NULL, 'RLM-PERF1-016', 'RLM-PERF2-016', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000037', '172033', 'AR/VR Content Service', 'REQ037', 'feature/webxr-support', 'January', 'Pending', 'dev2', 'CRUD', '2024-10-08 10:25:00', '2024-10-08 10:25:00', false, NULL, 'RLM-DEV1-037', 'RLM-UAT1-037', 'RLM-PERF1-037', 'RLM-PERF2-037', NULL, NULL);
+('MSDR0000017', '172223', 'content-create-service', 'jenkins-REQ017', 'main', '2025-09', 'Completed', 'dev2', 'Power Rangers', '2024-05-22 08:50:00', '2024-05-28 12:10:00', false, NULL, 'RLM-UAT1-017', 'RLM-UAT2-017', 'RLM-UAT3-017', 'RLM-PERF1-017', 'RLM-PERF2-017', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000038', '172223', 'Predictive Analytics Service', 'REQ038', 'main', 'February', 'In Progress', 'dev1', 'Crusaders', '2024-10-14 17:05:00', '2024-10-17 12:30:00', false, NULL, 'RLM-DEV1-038', 'RLM-UAT1-038', 'RLM-PERF1-038', 'RLM-PERF2-038', NULL, NULL);
+('MSDR0000018', '169608', 'loc-geocode-service', 'jenkins-REQ018', 'feature/location', '2025-09', 'In Progress', 'dev3', 'Ninja Turtles', '2024-06-01 10:20:00', '2024-06-03 16:35:00', true, 'jenkins-CONF018', 'RLM-UAT1-018', 'RLM-UAT2-018', NULL, NULL, NULL, NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000039', '169608', 'Digital Wallet Service', 'REQ039', 'feature/multi-currency', 'March', 'Pending', 'admin2', 'Phoenix', '2024-10-21 08:50:00', '2024-10-24 14:35:00', true, 'CONF039', 'RLM-DEV1-039', NULL, 'RLM-PERF1-039', 'RLM-PERF2-039', NULL, NULL);
+('MSDR0000019', '172033', 'ml-train-service', 'jenkins-REQ019', 'main', '2025-10', 'Pending', 'dev1', 'Avengers', '2024-06-08 12:45:00', '2024-06-10 09:15:00', false, NULL, 'RLM-UAT1-019', NULL, NULL, 'RLM-PERF1-019', 'RLM-PERF2-019', NULL, NULL, false),
 
-INSERT INTO deployment (serial_number, csi_id, service, request_id, release_branch, release, status, created_by, team, date_requested, date_modified, is_config, config_request_id, rlm_id_dev1, rlm_id_uat1, rlm_id_perf1, rlm_id_perf2, rlm_id_prod1, rlm_id_prod2)
-VALUES ('MSDR0000040', '172033', 'Smart Contract Service', 'REQ040', 'main', 'April', 'Completed', 'dev2', 'Avengers', '2024-10-28 11:15:00', '2024-11-05 16:40:00', false, NULL, 'RLM-DEV1-040', 'RLM-UAT1-040', 'RLM-PERF1-040', 'RLM-PERF2-040', 'RLM-PROD1-040', 'RLM-PROD2-040');
+('MSDR0000020', '172223', 'pay-processor-service', 'jenkins-REQ020', 'hotfix/payment', '2025-10', 'Open', 'dev2', 'X-Men', '2024-06-15 14:30:00', '2024-06-15 14:30:00', false, NULL, 'RLM-UAT1-020', 'RLM-UAT2-020', NULL, 'RLM-PERF1-020', 'RLM-PERF2-020', NULL, NULL, false),
 
--- Insert environments for all deployments
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (1, 'DEV1'), (1, 'UAT1'), (1, 'PERF1'), (1, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (2, 'DEV1'), (2, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (3, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (4, 'DEV1'), (4, 'UAT1'), (4, 'PERF1'), (4, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (5, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (6, 'DEV1'), (6, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (7, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (8, 'DEV1'), (8, 'UAT1'), (8, 'PERF1'), (8, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (9, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (10, 'DEV1'), (10, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (11, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (12, 'DEV1'), (12, 'UAT1'), (12, 'PERF1'), (12, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (13, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (14, 'DEV1'), (14, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (15, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (16, 'DEV1'), (16, 'UAT1'), (16, 'PERF1'), (16, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (17, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (18, 'DEV1'), (18, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (19, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (20, 'DEV1'), (20, 'UAT1'), (20, 'PERF1'), (20, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (21, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (22, 'DEV1'), (22, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (23, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (24, 'DEV1'), (24, 'UAT1'), (24, 'PERF1'), (24, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (25, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (26, 'DEV1'), (26, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (27, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (28, 'DEV1'), (28, 'UAT1'), (28, 'PERF1'), (28, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (29, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (30, 'DEV1'), (30, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (31, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (32, 'DEV1'), (32, 'UAT1'), (32, 'PERF1'), (32, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (33, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (34, 'DEV1'), (34, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (35, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (36, 'DEV1'), (36, 'UAT1'), (36, 'PERF1'), (36, 'PROD1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (37, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (38, 'DEV1'), (38, 'UAT1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (39, 'DEV1');
-INSERT INTO deployment_environments (deployment_id, environments) VALUES (40, 'DEV1'), (40, 'UAT1'), (40, 'PERF1'), (40, 'PROD1');
+-- Entries 21-30 (Latest dates) - Updated with new release format
+('MSDR0000021', '172033', 'auth-sso-service', 'jenkins-REQ021', 'feature/sso-integration', '2025-11', 'In Progress', 'dev2', 'Avengers', '2024-06-28 09:45:00', '2024-06-30 16:15:00', false, NULL, 'RLM-UAT1-021', 'RLM-UAT2-021', NULL, 'RLM-PERF1-021', 'RLM-PERF2-021', NULL, NULL, false),
+
+('MSDR0000022', '169608', 'file-storage-service', 'jenkins-REQ022', 'main', '2025-11', 'Pending', 'dev2', 'Transformers', '2024-07-01 14:55:00', '2024-07-03 11:40:00', true, 'jenkins-CONF022', 'RLM-UAT1-022', NULL, NULL, 'RLM-PERF1-022', NULL, NULL, NULL, false),
+
+('MSDR0000023', '172223', 'search-index-service', 'jenkins-REQ023', 'release/search-v2', '2025-12', 'Completed', 'dev1', 'Crusaders', '2024-07-05 10:35:00', '2024-07-07 15:20:00', false, NULL, 'RLM-UAT1-023', 'RLM-UAT2-023', 'RLM-UAT3-023', 'RLM-PERF1-023', 'RLM-PERF2-023', NULL, NULL, false),
+
+('MSDR0000024', '172033', 'pay-gateway-service', 'jenkins-REQ024', 'main', '2025-12', 'Open', 'dev1', 'Phoenix', '2024-07-08 12:10:00', '2024-07-08 12:10:00', true, 'jenkins-CONF024', 'RLM-UAT1-024', NULL, NULL, NULL, NULL, NULL, NULL, false),
+
+('MSDR0000025', '169608', 'user-profile-service', 'jenkins-REQ025', 'feature/profile-v3', '2026-01', 'In Progress', 'dev3', 'Hyper Care', '2024-07-10 16:25:00', '2024-07-12 14:50:00', false, NULL, 'RLM-UAT1-025', 'RLM-UAT2-025', NULL, 'RLM-PERF1-025', 'RLM-PERF2-025', NULL, NULL, false),
+
+('MSDR0000026', '172223', 'data-analytics-service', 'jenkins-REQ026', 'main', '2026-01', 'Completed', 'dev3', 'CRUD', '2024-07-14 08:15:00', '2024-07-15 17:30:00', false, NULL, 'RLM-UAT1-026', 'RLM-UAT2-026', 'RLM-UAT3-026', 'RLM-PERF1-026', 'RLM-PERF2-026', NULL, NULL, false),
+
+('MSDR0000027', '172033', 'notif-push-service', 'jenkins-REQ027', 'hotfix/notifications', '2026-02', 'Pending', 'dev2', 'Avengers', '2024-07-15 11:40:00', '2024-07-16 13:20:00', true, 'jenkins-CONF027', 'RLM-UAT1-027', NULL, NULL, NULL, NULL, NULL, NULL, false),
+
+('MSDR0000028', '169608', 'cache-redis-service', 'jenkins-REQ028', 'main', '2026-02', 'Completed', 'dev1', 'Transformers', '2024-07-16 09:20:00', '2024-07-17 16:45:00', false, NULL, 'RLM-UAT1-028', 'RLM-UAT2-028', 'RLM-UAT3-028', 'RLM-PERF1-028', 'RLM-PERF2-028', NULL, NULL, false),
+
+('MSDR0000029', '172223', 'api-security-service', 'jenkins-REQ029', 'feature/security-v2', '2026-03', 'In Progress', 'dev2', 'Crusaders', '2024-07-17 14:30:00', '2024-07-18 10:15:00', true, 'jenkins-CONF029', 'RLM-UAT1-029', 'RLM-UAT2-029', NULL, 'RLM-PERF1-029', NULL, NULL, NULL, false),
+
+('MSDR0000030', '172033', 'ml-pipeline-service', 'jenkins-REQ030', 'main', '2026-03', 'Open', 'dev1', 'Phoenix', '2024-07-18 15:00:00', '2024-07-18 15:00:00', false, NULL, 'RLM-UAT1-030', 'RLM-UAT2-030', 'RLM-UAT3-030', 'RLM-PERF1-030', 'RLM-PERF2-030', NULL, NULL, false);
