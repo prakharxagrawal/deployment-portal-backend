@@ -1,184 +1,99 @@
-# Deployment Portal Backend
+# 🚀 Deployment Portal - Centralized Documentation
 
-Spring Boot backend application providing REST APIs for deployment management, user authentication, and role-based access control.
+**Complete Documentation Hub for Enterprise Deployment**
 
-## 📚 Documentation
+## 📋 **Quick Navigation**
 
-For complete documentation, please refer to the main project documentation:
+### 🏢 **Organization Setup**
+- [**Enterprise Installation Guide**](./setup/ENTERPRISE_INSTALLATION.md) - Complete setup for new organizations
+- [**Database Setup**](./setup/DATABASE_SETUP.md) - Schema creation, configuration, and hosting
+- [**Server Deployment**](./deployment/SERVER_DEPLOYMENT.md) - Production hosting and infrastructure
+- [**Security Configuration**](./setup/SECURITY_SETUP.md) - Authentication, authorization, and compliance
 
-**📖 [Complete Documentation Hub](../../docs/README.md)** - All project documentation
+### 👥 **User Guides**  
+- [**End User Guide**](./user-guides/END_USER_GUIDE.md) - For developers and business users
+- [**Administrator Guide**](./user-guides/ADMIN_GUIDE.md) - For system administrators
+- [**Superadmin Guide**](./user-guides/SUPERADMIN_GUIDE.md) - For system superadmins
 
-### Quick Setup
-```bash
-# Build and run
-mvn spring-boot:run
+### 🔧 **Technical Documentation**
+- [**API Reference**](./technical/API_REFERENCE.md) - Complete REST API documentation
+- [**Architecture Overview**](./technical/ARCHITECTURE.md) - System design and components
+- [**Database Schema**](./technical/DATABASE_SCHEMA.md) - Complete database structure
+- [**Development Guide**](./technical/DEVELOPMENT_GUIDE.md) - For developers extending the system
 
-# Or build JAR and run
-mvn clean package
-java -jar target/deployment-portal-0.0.1-SNAPSHOT.jar
-```
+### 🚀 **Deployment & Operations**
+- [**Production Deployment**](./deployment/PRODUCTION_DEPLOYMENT.md) - Production hosting guide
+- [**Monitoring & Maintenance**](./deployment/MONITORING.md) - System monitoring and troubleshooting
+- [**Backup & Recovery**](./deployment/BACKUP_RECOVERY.md) - Data protection strategies
 
-### Key Features
-- **REST API** - Comprehensive RESTful endpoints for frontend integration
-- **Spring Security** - JWT-based authentication and role-based authorization
-- **JPA/Hibernate** - Object-relational mapping with PostgreSQL/H2 support
-- **Data Validation** - Input validation and error handling
-- **Database Migration** - Flyway/Liquibase support for schema management
+---
 
-### API Documentation
-- **[API Reference](../../docs/technical/API_REFERENCE.md)** - Complete REST API documentation
-- **[Database Setup](../../docs/setup/DATABASE_SETUP.md)** - Database configuration guide
+## 🎯 **Quick Start for New Organizations**
 
-### Development
-For detailed development setup and guidelines, see [Development Guide](../../docs/technical/DEVELOPMENT_GUIDE.md).
+### **Phase 1: Infrastructure Setup** (IT Team)
+1. [Database Setup](./setup/DATABASE_SETUP.md) - Set up PostgreSQL/MySQL database
+2. [Security Configuration](./setup/SECURITY_SETUP.md) - Configure authentication
+3. [Server Deployment](./deployment/SERVER_DEPLOYMENT.md) - Deploy to production servers
 
-## Quick Start
+### **Phase 2: Application Configuration** (DevOps Team)
+1. [Enterprise Installation](./setup/ENTERPRISE_INSTALLATION.md) - Install and configure application
+2. [Production Deployment](./deployment/PRODUCTION_DEPLOYMENT.md) - Production environment setup
+3. [Monitoring Setup](./deployment/MONITORING.md) - Set up monitoring and alerts
 
-### Prerequisites
-- Java 17+
-- Node.js 18+
-- Angular CLI 16+
-- Maven 3.6+
+### **Phase 3: User Onboarding** (Business Team)
+1. [Superadmin Guide](./user-guides/SUPERADMIN_GUIDE.md) - Initial system setup
+2. [Admin Guide](./user-guides/ADMIN_GUIDE.md) - User management and operations
+3. [End User Guide](./user-guides/END_USER_GUIDE.md) - Training for developers
 
-### Backend Setup
-```bash
-cd backend/deployment-portal
-mvn spring-boot:run
-```
+---
 
-### Frontend Setup
-```bash
-cd frontend/deployment-portal-frontend
-npm install
-npm start
-```
+## 📊 **System Overview**
 
-## Application Access
-- **Frontend:** http://localhost:4200
-- **Backend API:** http://localhost:8080/api
-- **Database Console:** http://localhost:8080/h2-console 🗄️
+### **What is the Deployment Portal?**
+A comprehensive web application for managing software deployment requests across multiple environments (DEV, UAT, PERF, PROD) with role-based access control and complete audit trails.
 
-## Database Access (H2 Console)
-- **JDBC URL:** `jdbc:h2:mem:deploymentdb`
-- **Username:** `sa`
-- **Password:** (leave empty)
-- **Driver:** `org.h2.Driver`
+### **Key Features**
+- **Multi-Environment Support**: DEV1-3, UAT1-3, PERF1-2, PROD1-2
+- **Role-Based Access**: Superadmin, Admin, Developer with granular permissions
+- **RLM ID Management**: Environment-specific Release Lifecycle Management IDs
+- **Deployment Readiness**: Performance and production readiness workflows
+- **Complete Audit Trail**: Full request lifecycle tracking
+- **CSV Export**: Comprehensive reporting and data export capabilities
 
-📖 **See [DATABASE_ACCESS_GUIDE.md](./DATABASE_ACCESS_GUIDE.md) for complete database access instructions**
+### **Technology Stack**
+- **Frontend**: Angular 19+ with TypeScript, Material UI
+- **Backend**: Spring Boot 3+ with Java 17+
+- **Database**: PostgreSQL/MySQL with JPA/Hibernate
+- **Security**: Session-based authentication with role-based authorization
 
-## Default Users
-- **Superadmin:** superadmin / admin123
-- **Admin:** admin1 / admin123
-- **Developer:** dev1 / dev123
+---
 
-## ✨ Key Features
+## 🆘 **Getting Help**
 
-### 🔐 Role-Based Access Control
-- **4 User Roles:** Superadmin, Admin, Developer with specific permissions
-- **Session Management:** 12-hour persistent sessions
-- **Secure Authentication:** Session-based with CORS protection
+### **For End Users**
+- Check the [End User Guide](./user-guides/END_USER_GUIDE.md)
+- Contact your system administrator
 
-### 📋 Deployment Management
-- **Request Lifecycle:** Open → In Progress → Pending → Completed
-- **Environment Support:** DEV, UAT, PERF, PROD environments
-- **RLM ID Tracking:** Environment-specific deployment identifiers
-- **Production Ready:** Formal approval process for production deployments
+### **For Administrators**
+- Review the [Admin Guide](./user-guides/ADMIN_GUIDE.md)
+- Check [Troubleshooting](./deployment/MONITORING.md#troubleshooting)
 
-### 🎯 Release Management
-- **Create Releases:** Admin-only release creation with YYYY-MM format
-- **Release Validation:** Automatic format and uniqueness validation
-- **Release Tracking:** Link all deployments to specific releases
-- **Chronological Display:** Latest releases displayed first
+### **For Technical Issues**
+- Consult the [Development Guide](./technical/DEVELOPMENT_GUIDE.md)
+- Review [API Documentation](./technical/API_REFERENCE.md)
 
-### 🔍 Advanced Filtering & Search
-- **Universal Search:** Search across MSDR numbers, services, and dates
-- **7 Filter Categories:** Status, Environment, Team, Release, Service, User, Date
-- **Real-time Filtering:** Instant results as you type or select
-- **Clear Filters:** One-click filter reset
+### **For Infrastructure Issues**
+- Check [Server Deployment](./deployment/SERVER_DEPLOYMENT.md)
+- Review [Monitoring Guide](./deployment/MONITORING.md)
 
-### 📊 Reporting & Export
-- **CSV Export:** Complete deployment data export
-- **Date Range Filtering:** Export deployments by requested date range
-- **Multi-filter Export:** Combine multiple filters for precise exports
-- **Management Reports:** Comprehensive audit trails for compliance
+---
 
-### 🎨 Modern UI/UX
-- **Material Design:** Clean, professional interface
-- **Responsive Layout:** Works on desktop and mobile devices
-- **Real-time Updates:** Live status changes and progress tracking
-- **Intuitive Navigation:** Easy-to-use interface for all user roles
+## 📈 **Version Information**
 
-## Technology Stack
-- **Backend:** Spring Boot 2.7+, JPA, H2 Database, Maven
-- **Frontend:** Angular 16+, TypeScript, Angular Material, Standalone Components
-- **Security:** Session-based authentication with role-based authorization
+- **Current Version**: 1.0.0
+- **Last Updated**: August 2025
+- **Compatibility**: Enterprise environments with Java 17+, Angular 19+
 
-## Quick Troubleshooting
+---
 
-### Common Issues
-
-**Backend won't start:**
-```bash
-# Check Java version
-java -version
-
-# Clean and rebuild
-cd backend/deployment-portal
-mvn clean install
-mvn spring-boot:run
-```
-
-**Frontend won't start:**
-```bash
-# Check Node.js version
-node --version
-
-# Clear cache and reinstall
-cd frontend/deployment-portal-frontend
-rm -rf node_modules package-lock.json
-npm install
-npm start
-```
-
-**Database issues:**
-```bash
-# Delete database files to reset
-rm backend/deployment-portal/testdb*
-# Restart backend - database will be recreated
-```
-
-**Port conflicts:**
-```bash
-# Backend (kill process on port 8080)
-lsof -ti:8080 | xargs kill -9
-
-# Frontend (kill process on port 4200)
-lsof -ti:4200 | xargs kill -9
-```
-
-## Project Structure
-```
-deployment-portal-angular/
-├── backend/
-│   └── deployment-portal/          # Spring Boot application
-│       ├── src/main/java/          # Java source code
-│       ├── src/main/resources/     # Configuration & data
-│       └── pom.xml                 # Maven dependencies
-├── frontend/
-│   └── deployment-portal-frontend/ # Angular application
-│       ├── src/app/                # Angular components & services
-│       ├── src/assets/             # Static assets
-│       └── package.json            # NPM dependencies
-└── *.md                           # Documentation files
-```
-
-## Support & Contributing
-For development support or questions about this deployment portal:
-
-1. **Check Documentation:** Review the comprehensive docs in this repository
-2. **Common Issues:** See troubleshooting section above
-3. **Technical Details:** Refer to TECHNICAL_DOCUMENTATION.md
-4. **API Issues:** Check API_REFERENCE.md for endpoint details
-
-## License
-This project is proprietary software developed for internal deployment management.
+*This documentation is maintained centrally to ensure consistency and ease of maintenance. All previous scattered documentation has been consolidated here.*
