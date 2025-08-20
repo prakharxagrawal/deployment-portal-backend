@@ -46,11 +46,17 @@ public class Deployment {
     // Business request identifier (e.g., "jenkins-REQ001")
     private String requestId;
     
+    // Alternative to request ID - upcoming branch identifier (e.g., "upcoming/feature-branch")
+    private String upcomingBranch;
+    
     // Flag indicating if this is a configuration request (vs application deployment)
     private Boolean isConfig = false;
     
     // Configuration-specific request ID (only used when isConfig = true)
     private String configRequestId;
+    
+    // Alternative to config request ID - upcoming config branch identifier (e.g., "upcoming/config-branch")
+    private String upcomingConfigBranch;
     
     // List of environments requested for deployment (UAT1, UAT2, UAT3, PERF, PROD)
     @ElementCollection // JPA annotation to store collection in separate table
@@ -92,6 +98,9 @@ public class Deployment {
     
     // Flag indicating if deployment is ready for production (final approval)
     private Boolean productionReady = false;
+    
+    // Flag indicating if deployment is ready for performance environment (performance approval)
+    private Boolean performanceReady = false;
 
     // Getter and Setter methods with descriptive comments
     
@@ -146,6 +155,16 @@ public class Deployment {
     public void setRequestId(String requestId) { this.requestId = requestId; }
     
     /**
+     * @return The upcoming branch identifier
+     */
+    public String getUpcomingBranch() { return upcomingBranch; }
+    
+    /**
+     * @param upcomingBranch The upcoming branch identifier to set
+     */
+    public void setUpcomingBranch(String upcomingBranch) { this.upcomingBranch = upcomingBranch; }
+    
+    /**
      * @return True if this is a configuration request
      */
     public Boolean getIsConfig() { return isConfig; }
@@ -164,6 +183,16 @@ public class Deployment {
      * @param configRequestId The config request ID to set
      */
     public void setConfigRequestId(String configRequestId) { this.configRequestId = configRequestId; }
+    
+    /**
+     * @return The upcoming config branch identifier
+     */
+    public String getUpcomingConfigBranch() { return upcomingConfigBranch; }
+    
+    /**
+     * @param upcomingConfigBranch The upcoming config branch identifier to set
+     */
+    public void setUpcomingConfigBranch(String upcomingConfigBranch) { this.upcomingConfigBranch = upcomingConfigBranch; }
     
     /**
      * @return List of target environments for this deployment
@@ -279,6 +308,17 @@ public class Deployment {
      * Note: Can only be set by original requester or superadmin, and only when status is "Completed"
      */
     public void setProductionReady(Boolean productionReady) { this.productionReady = productionReady; }
+    
+    /**
+     * @return True if this deployment is marked as performance ready
+     */
+    public Boolean getPerformanceReady() { return performanceReady; }
+    
+    /**
+     * @param performanceReady Set to true when deployment is performance ready
+     * Note: Can only be set by original requester or superadmin, and only when status is "Completed"
+     */
+    public void setPerformanceReady(Boolean performanceReady) { this.performanceReady = performanceReady; }
     
     /**
      * JPA lifecycle callback - called before persisting a new entity

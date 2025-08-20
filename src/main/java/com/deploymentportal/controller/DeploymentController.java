@@ -22,9 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 // Java utility imports for data manipulation
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -199,6 +197,11 @@ public class DeploymentController {
                     (d.getSerialNumber() != null && d.getSerialNumber().toLowerCase().contains(searchLower)) ||
                     // Search across service name
                     (d.getService() != null && d.getService().toLowerCase().contains(searchLower)) ||
+                    // Search across environments (with PERF expansion logic)
+                    (d.getEnvironments() != null && 
+                     (d.getEnvironments().stream().anyMatch(env -> env.toLowerCase().contains(searchLower)) ||
+                      // Special case: if searching for "PERF", find records with both PERF1 and PERF2
+                      ("perf".equals(searchLower) && d.getEnvironments().contains("PERF1") && d.getEnvironments().contains("PERF2")))) ||
                     // Search across dates (both requested and modified dates)
                     (d.getDateRequested() != null && d.getDateRequested().toString().contains(searchLower)) ||
                     (d.getDateModified() != null && d.getDateModified().toString().contains(searchLower)) ||
@@ -211,6 +214,25 @@ public class DeploymentController {
                 )
                 .collect(Collectors.toList());
         }
+        
+        // STEP 5: Transform environments for frontend display
+        // Convert PERF1+PERF2 combination back to single "PERF" for frontend display
+        // STEP 5: Transform environments for frontend display
+        // Convert PERF1+PERF2 combination back to single "PERF" for frontend display
+        deployments = deployments.stream()
+            .map(deployment -> {
+                List<String> environments = deployment.getEnvironments();
+                if (environments != null && environments.contains("PERF1") && environments.contains("PERF2")) {
+                    // Create a new list with PERF instead of PERF1+PERF2
+                    List<String> displayEnvironments = new ArrayList<>(environments);
+                    displayEnvironments.remove("PERF1");
+                    displayEnvironments.remove("PERF2");
+                    displayEnvironments.add("PERF");
+                    deployment.setEnvironments(displayEnvironments);
+                }
+                return deployment;
+            })
+            .collect(Collectors.toList());
         
         // Return the filtered and sorted list
         return deployments;
@@ -234,6 +256,24 @@ public class DeploymentController {
             if (b.getDateRequested() == null) return -1;
             return b.getDateRequested().compareTo(a.getDateRequested());
         });
+        
+        // Transform environments for frontend display
+        // Convert PERF1+PERF2 combination back to single "PERF" for frontend display
+        deployments = deployments.stream()
+            .map(deployment -> {
+                List<String> environments = deployment.getEnvironments();
+                if (environments != null && environments.contains("PERF1") && environments.contains("PERF2")) {
+                    // Create a new list with PERF instead of PERF1+PERF2
+                    List<String> displayEnvironments = new ArrayList<>(environments);
+                    displayEnvironments.remove("PERF1");
+                    displayEnvironments.remove("PERF2");
+                    displayEnvironments.add("PERF");
+                    deployment.setEnvironments(displayEnvironments);
+                }
+                return deployment;
+            })
+            .collect(Collectors.toList());
+            
         return deployments;
     }
 
@@ -249,7 +289,82 @@ public class DeploymentController {
      * @return ResponseEntity with success message
      */
     @PostMapping("/api/deployments")
-    public ResponseEntity<Map<String, String>> createDeployment(@RequestBody Deployment deployment) {
+    public ResponseEntity<Map<String, String>> createDeployment(@RequestBody Deployment deployment, HttpServletRequest request) {
+        // SECURITY CHECK: Validate user session for authentication
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthorized"));
+        }
+        
+        // Get current logged-in user from session
+        User currentUser = (User) session.getAttribute("user");
+        
+        // ROLE-BASED AUTHORIZATION: Check if user can create deployments
+        boolean isSuperAdmin = "superadmin".equals(currentUser.getRole());
+        boolean isDeveloper = "developer".equals(currentUser.getRole());
+        
+        // Only developers and superadmins can create requests (admins cannot)
+        if (!isDeveloper && !isSuperAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Only developers and superadmins can create deployment requests"));
+        }
+        
+        // Set the creator in the deployment
+        deployment.setCreatedBy(currentUser.getUsername());
+        // VALIDATION: Check that either requestId or upcomingBranch is provided
+        boolean hasRequestId = deployment.getRequestId() != null && !deployment.getRequestId().trim().isEmpty();
+        boolean hasUpcomingBranch = deployment.getUpcomingBranch() != null && !deployment.getUpcomingBranch().trim().isEmpty();
+        
+        if (!hasRequestId && !hasUpcomingBranch) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Either Request ID or Upcoming Branch is required"));
+        }
+        
+        // VALIDATION: Check prefix requirements for requestId
+        if (hasRequestId && !deployment.getRequestId().trim().startsWith("jenkins-")) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Request ID must start with 'jenkins-'"));
+        }
+        
+        // VALIDATION: Check prefix requirements for upcomingBranch
+        if (hasUpcomingBranch && !deployment.getUpcomingBranch().trim().startsWith("upcoming/")) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Upcoming Branch must start with 'upcoming/'"));
+        }
+        
+        // VALIDATION: Check config fields if config request is enabled
+        if (deployment.getIsConfig() != null && deployment.getIsConfig()) {
+            boolean hasConfigRequestId = deployment.getConfigRequestId() != null && !deployment.getConfigRequestId().trim().isEmpty();
+            boolean hasUpcomingConfigBranch = deployment.getUpcomingConfigBranch() != null && !deployment.getUpcomingConfigBranch().trim().isEmpty();
+            
+            if (!hasConfigRequestId && !hasUpcomingConfigBranch) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Either Config Request ID or Upcoming Config Branch is required when Config is checked"));
+            }
+            
+            // VALIDATION: Check prefix requirements for configRequestId
+            if (hasConfigRequestId && !deployment.getConfigRequestId().trim().startsWith("jenkins-")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Config Request ID must start with 'jenkins-'"));
+            }
+            
+            // VALIDATION: Check prefix requirements for upcomingConfigBranch
+            if (hasUpcomingConfigBranch && !deployment.getUpcomingConfigBranch().trim().startsWith("upcoming/")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Upcoming Config Branch must start with 'upcoming/'"));
+            }
+        }
+        
+        // ENVIRONMENT EXPANSION: Convert PERF selection to PERF1 + PERF2
+        if (deployment.getEnvironments() != null) {
+            List<String> expandedEnvironments = deployment.getEnvironments().stream()
+                .flatMap(env -> {
+                    if ("PERF".equals(env)) {
+                        // When user selects PERF, expand to both PERF1 and PERF2
+                        return java.util.stream.Stream.of("PERF1", "PERF2");
+                    } else {
+                        return java.util.stream.Stream.of(env);
+                    }
+                })
+                .distinct() // Remove duplicates in case user somehow selected both PERF and PERF1/PERF2
+                .collect(Collectors.toList());
+            deployment.setEnvironments(expandedEnvironments);
+        }
+        
         // Generate unique MSDR serial number (e.g., MSDR0000001)
         deployment.setSerialNumber(generateSerialNumber());
         
@@ -301,7 +416,35 @@ public class DeploymentController {
         if (existing.isPresent()) {
             Deployment existingDeployment = existing.get();
             
-            // PRODUCTION READY PERMISSION CHECK: Special handling for production ready flag
+            // ROLE-BASED AUTHORIZATION: Check if user has permission to make changes
+            boolean isSuperAdmin = "superadmin".equals(currentUser.getRole());
+            boolean isAdmin = "admin".equals(currentUser.getRole()) || isSuperAdmin;
+            boolean isDeveloper = "developer".equals(currentUser.getRole());
+            boolean isRequestOwner = currentUser.getUsername().equals(existingDeployment.getCreatedBy());
+            
+            // STATUS CHANGE AUTHORIZATION: Only admins and superadmins can change status
+            if (deployment.getStatus() != null && !deployment.getStatus().equals(existingDeployment.getStatus())) {
+                if (!isAdmin) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("error", "Only admins and superadmins can change deployment status"));
+                }
+            }
+            
+            // RLM AUTHORIZATION: Check if user can edit RLM fields
+            boolean hasRlmChanges = (deployment.getRlmIdUat1() != null && !Objects.equals(deployment.getRlmIdUat1(), existingDeployment.getRlmIdUat1())) ||
+                                   (deployment.getRlmIdUat2() != null && !Objects.equals(deployment.getRlmIdUat2(), existingDeployment.getRlmIdUat2())) ||
+                                   (deployment.getRlmIdUat3() != null && !Objects.equals(deployment.getRlmIdUat3(), existingDeployment.getRlmIdUat3())) ||
+                                   (deployment.getRlmIdPerf1() != null && !Objects.equals(deployment.getRlmIdPerf1(), existingDeployment.getRlmIdPerf1())) ||
+                                   (deployment.getRlmIdPerf2() != null && !Objects.equals(deployment.getRlmIdPerf2(), existingDeployment.getRlmIdPerf2())) ||
+                                   (deployment.getRlmIdProd1() != null && !Objects.equals(deployment.getRlmIdProd1(), existingDeployment.getRlmIdProd1())) ||
+                                   (deployment.getRlmIdProd2() != null && !Objects.equals(deployment.getRlmIdProd2(), existingDeployment.getRlmIdProd2()));
+            
+            if (hasRlmChanges && !isAdmin) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Only admins and superadmins can edit RLM IDs"));
+            }
+            
+            // PRODUCTION READY PERMISSION CHECK: Enhanced role validation
             if (deployment.getProductionReady() != null && deployment.getProductionReady() != existingDeployment.getProductionReady()) {
                 // Business Rule 1: Can only mark as production ready when status is "Completed"
                 if (!"Completed".equals(existingDeployment.getStatus())) {
@@ -309,9 +452,35 @@ public class DeploymentController {
                 }
                 
                 // Business Rule 2: Only requester (creator) or superadmin can mark as production ready
-                if (!(currentUser.getRole().equals("superadmin") || 
-                      currentUser.getUsername().equals(existingDeployment.getCreatedBy()))) {
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Only requester or super admin can mark as production ready"));
+                // Enhanced: Superadmin gets priority, then check if developer is the owner
+                if (!isSuperAdmin && !(isDeveloper && isRequestOwner)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("error", "Only the original requester or superadmin can mark as production ready"));
+                }
+                
+                // Business Rule 3: When marked as production ready, reset status to Pending for review
+                if (deployment.getProductionReady()) {
+                    deployment.setStatus("Pending");
+                }
+            }
+            
+            // PERFORMANCE READY PERMISSION CHECK: Enhanced role validation
+            if (deployment.getPerformanceReady() != null && deployment.getPerformanceReady() != existingDeployment.getPerformanceReady()) {
+                // Business Rule 1: Can only mark as performance ready when status is "Completed"
+                if (!"Completed".equals(existingDeployment.getStatus())) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "Can only mark as performance ready when status is Completed"));
+                }
+                
+                // Business Rule 2: Only requester (creator) or superadmin can mark as performance ready
+                // Enhanced: Superadmin gets priority, then check if developer is the owner
+                if (!isSuperAdmin && !(isDeveloper && isRequestOwner)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("error", "Only the original requester or superadmin can mark as performance ready"));
+                }
+                
+                // Business Rule 3: When marked as performance ready, reset status to Pending for review
+                if (deployment.getPerformanceReady()) {
+                    deployment.setStatus("Pending");
                 }
             }
             
@@ -320,6 +489,90 @@ public class DeploymentController {
             deployment.setSerialNumber(existingDeployment.getSerialNumber()); // MSDR number never changes
             deployment.setDateRequested(existingDeployment.getDateRequested()); // Creation date never changes
             deployment.setDateModified(java.time.LocalDateTime.now()); // Always update modification time
+            
+            // VALIDATION: Only perform field validation if not restricted by read-only mode
+            boolean isReadOnly = (existingDeployment.getProductionReady() != null && existingDeployment.getProductionReady()) ||
+                                (existingDeployment.getPerformanceReady() != null && existingDeployment.getPerformanceReady());
+            
+            if (!isReadOnly || currentUser.getRole().equals("superadmin")) {
+                // VALIDATION: Check that either requestId or upcomingBranch is provided
+                boolean hasRequestId = deployment.getRequestId() != null && !deployment.getRequestId().trim().isEmpty();
+                boolean hasUpcomingBranch = deployment.getUpcomingBranch() != null && !deployment.getUpcomingBranch().trim().isEmpty();
+                
+                if (!hasRequestId && !hasUpcomingBranch) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "Either Request ID or Upcoming Branch is required"));
+                }
+                
+                // VALIDATION: Check prefix requirements for requestId
+                if (hasRequestId && !deployment.getRequestId().trim().startsWith("jenkins-")) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "Request ID must start with 'jenkins-'"));
+                }
+                
+                // VALIDATION: Check prefix requirements for upcomingBranch
+                if (hasUpcomingBranch && !deployment.getUpcomingBranch().trim().startsWith("upcoming/")) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "Upcoming Branch must start with 'upcoming/'"));
+                }
+                
+                // VALIDATION: Check config fields if config request is enabled
+                if (deployment.getIsConfig() != null && deployment.getIsConfig()) {
+                    boolean hasConfigRequestId = deployment.getConfigRequestId() != null && !deployment.getConfigRequestId().trim().isEmpty();
+                    boolean hasUpcomingConfigBranch = deployment.getUpcomingConfigBranch() != null && !deployment.getUpcomingConfigBranch().trim().isEmpty();
+                    
+                    if (!hasConfigRequestId && !hasUpcomingConfigBranch) {
+                        return ResponseEntity.badRequest().body(Map.of("error", "Either Config Request ID or Upcoming Config Branch is required when Config is checked"));
+                    }
+                    
+                    // VALIDATION: Check prefix requirements for configRequestId
+                    if (hasConfigRequestId && !deployment.getConfigRequestId().trim().startsWith("jenkins-")) {
+                        return ResponseEntity.badRequest().body(Map.of("error", "Config Request ID must start with 'jenkins-'"));
+                    }
+                    
+                    // VALIDATION: Check prefix requirements for upcomingConfigBranch
+                    if (hasUpcomingConfigBranch && !deployment.getUpcomingConfigBranch().trim().startsWith("upcoming/")) {
+                        return ResponseEntity.badRequest().body(Map.of("error", "Upcoming Config Branch must start with 'upcoming/'"));
+                    }
+                }
+            }
+            
+            // ENVIRONMENT EXPANSION: Convert PERF selection to PERF1 + PERF2 (only if not read-only)
+            if (!isReadOnly && deployment.getEnvironments() != null) {
+                List<String> expandedEnvironments = deployment.getEnvironments().stream()
+                    .flatMap(env -> {
+                        if ("PERF".equals(env)) {
+                            // When user selects PERF, expand to both PERF1 and PERF2
+                            return java.util.stream.Stream.of("PERF1", "PERF2");
+                        } else {
+                            return java.util.stream.Stream.of(env);
+                        }
+                    })
+                    .distinct() // Remove duplicates in case user somehow selected both PERF and PERF1/PERF2
+                    .collect(Collectors.toList());
+                deployment.setEnvironments(expandedEnvironments);
+            }
+            
+            // READ-ONLY RESTRICTION CHECK: Enhanced superadmin override
+            if (isReadOnly && !isSuperAdmin) {
+                // Only allow readiness flag changes and status updates for non-superadmin users
+                deployment.setCsiId(existingDeployment.getCsiId());
+                deployment.setService(existingDeployment.getService());
+                deployment.setRequestId(existingDeployment.getRequestId());
+                deployment.setUpcomingBranch(existingDeployment.getUpcomingBranch());
+                deployment.setEnvironments(existingDeployment.getEnvironments());
+                deployment.setTeam(existingDeployment.getTeam());
+                deployment.setRelease(existingDeployment.getRelease());
+                deployment.setIsConfig(existingDeployment.getIsConfig());
+                deployment.setConfigRequestId(existingDeployment.getConfigRequestId());
+                deployment.setUpcomingConfigBranch(existingDeployment.getUpcomingConfigBranch());
+                
+                // Preserve existing RLM IDs for non-superadmin users when read-only
+                deployment.setRlmIdUat1(existingDeployment.getRlmIdUat1());
+                deployment.setRlmIdUat2(existingDeployment.getRlmIdUat2());
+                deployment.setRlmIdUat3(existingDeployment.getRlmIdUat3());
+                deployment.setRlmIdPerf1(existingDeployment.getRlmIdPerf1());
+                deployment.setRlmIdPerf2(existingDeployment.getRlmIdPerf2());
+                deployment.setRlmIdProd1(existingDeployment.getRlmIdProd1());
+                deployment.setRlmIdProd2(existingDeployment.getRlmIdProd2());
+            }
             
             // STATUS VALIDATION: Validate status updates if provided
             if (deployment.getStatus() != null && !deployment.getStatus().trim().isEmpty()) {
@@ -344,6 +597,12 @@ public class DeploymentController {
                 deployment.setProductionReady(existingDeployment.getProductionReady());
             }
             
+            // PERFORMANCE READY FIELD: Handle performance ready flag
+            if (deployment.getPerformanceReady() == null) {
+                // If not provided in update, preserve existing value
+                deployment.setPerformanceReady(existingDeployment.getPerformanceReady());
+            }
+            
             // SAVE UPDATED DEPLOYMENT: Persist changes to database
             deploymentRepository.save(deployment);
             return ResponseEntity.ok(Map.of("message", "Deployment updated"));
@@ -363,7 +622,22 @@ public class DeploymentController {
      * @return ResponseEntity with success/error message
      */
     @DeleteMapping("/api/deployments/{id}")
-    public ResponseEntity<Map<String, String>> deleteDeployment(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteDeployment(@PathVariable Long id, HttpServletRequest request) {
+        // SECURITY CHECK: Validate user session for authentication
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthorized"));
+        }
+        
+        // Get current logged-in user from session
+        User currentUser = (User) session.getAttribute("user");
+        
+        // ROLE-BASED AUTHORIZATION: Only superadmins can delete deployments
+        if (!"superadmin".equals(currentUser.getRole())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Only superadmins can delete deployment requests"));
+        }
+        
         // Check if deployment exists before attempting deletion
         if (deploymentRepository.existsById(id)) {
             // Delete the deployment from database
@@ -445,8 +719,11 @@ public class DeploymentController {
                             case "UAT3":
                                 return d.getRlmIdUat3() != null;
                             case "PERF":
-                                // PERF includes both PERF1 and PERF2
-                                return d.getRlmIdPerf1() != null || d.getRlmIdPerf2() != null;
+                                // PERF filter should find deployments that contain both PERF1 and PERF2
+                                // (since selecting PERF means requesting both PERF1 and PERF2)
+                                return d.getEnvironments() != null && 
+                                       d.getEnvironments().contains("PERF1") && 
+                                       d.getEnvironments().contains("PERF2");
                             case "PROD":
                                 // PROD includes both PROD1 and PROD2
                                 return d.getRlmIdProd1() != null || d.getRlmIdProd2() != null;

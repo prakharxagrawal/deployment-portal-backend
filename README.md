@@ -1,23 +1,36 @@
-# Deployment Portal Application
+# Deployment Portal Backend
 
-A comprehensive Spring Boot + Angular application for managing deployment requests with role-based access control, advanced filtering, and CSV export capabilities.
+Spring Boot backend application providing REST APIs for deployment management, user authentication, and role-based access control.
 
-## Documentation Structure
+## 📚 Documentation
 
-This project contains several documentation files to help you understand and work with the deployment portal:
+For complete documentation, please refer to the main project documentation:
 
-### 🎯 Executive Summary
-- **[PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md)** - Executive overview, business value, and project achievements
+**📖 [Complete Documentation Hub](../../docs/README.md)** - All project documentation
 
-### 📋 Main Documentation
-- **[APPLICATION_OVERVIEW.md](./APPLICATION_OVERVIEW.md)** - High-level application overview, features, and business logic
-- **[USER_GUIDE.md](./USER_GUIDE.md)** - Complete user guide for all roles (developers, admins, superadmins)
-- **[TECHNICAL_DOCUMENTATION.md](./TECHNICAL_DOCUMENTATION.md)** - Technical architecture, API documentation, and implementation details
-- **[DEVELOPER_SETUP.md](./DEVELOPER_SETUP.md)** - Development environment setup and deployment instructions
-- **[API_REFERENCE.md](./API_REFERENCE.md)** - Complete REST API reference documentation
-- **[DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md)** - Database design, relationships, and sample data
-- **[DATABASE_ACCESS_GUIDE.md](./DATABASE_ACCESS_GUIDE.md)** - 🗄️ Complete guide for accessing the H2 database during runtime
-- **[ARCHITECTURE_DIAGRAMS.md](./ARCHITECTURE_DIAGRAMS.md)** - System architecture, deployment diagrams, and data flow
+### Quick Setup
+```bash
+# Build and run
+mvn spring-boot:run
+
+# Or build JAR and run
+mvn clean package
+java -jar target/deployment-portal-0.0.1-SNAPSHOT.jar
+```
+
+### Key Features
+- **REST API** - Comprehensive RESTful endpoints for frontend integration
+- **Spring Security** - JWT-based authentication and role-based authorization
+- **JPA/Hibernate** - Object-relational mapping with PostgreSQL/H2 support
+- **Data Validation** - Input validation and error handling
+- **Database Migration** - Flyway/Liquibase support for schema management
+
+### API Documentation
+- **[API Reference](../../docs/technical/API_REFERENCE.md)** - Complete REST API documentation
+- **[Database Setup](../../docs/setup/DATABASE_SETUP.md)** - Database configuration guide
+
+### Development
+For detailed development setup and guidelines, see [Development Guide](../../docs/technical/DEVELOPMENT_GUIDE.md).
 
 ## Quick Start
 
